@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transactions for {{ client.name }}</title>
+    <title>Transactions</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Custom CSS can be added here */
     </style>
 </head>
-
 <body>
     <div class="container">
         <h1 class="mt-4">Transactions for {{ client.name }}</h1>
@@ -28,7 +26,7 @@
                     <th>Transaction Location X</th>
                     <th>Transaction Location Y</th>
                     <th>PREDICT</th>
-                    <th>Delete</th> <!-- Added Delete column -->
+                    <!-- Add other transaction attributes as needed -->
                 </tr>
             </thead>
             <tbody>
@@ -44,13 +42,10 @@
                     <td>{{ transaction.transactionlocationX }}</td>
                     <td>{{ transaction.transactionlocationY }}</td>
                     <td>
-                        <form action="{{ url_for('predict_transaction', transaction_id=transaction.tr_id,client_id=client.cl_id) }}" method="post">
-                            <button type="submit" class="btn btn-primary">Predict</button>
-                        </form>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger delete-btn" data-transaction-id="{{ transaction.tr_id }}">Delete</button>
-                    </td>
+                    <form action="{{ url_for('predict_transaction', transaction_id=transaction.tr_id,client_id=client.cl_id) }}" method="post">
+                        <button type="submit">Predict</button>
+                    </form>
+                </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -61,27 +56,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Custom JavaScript for asynchronous delete -->
-    <script>
-        $(document).ready(function() {
-            $(".delete-btn").click(function() {
-                var transactionId = $(this).data("transaction-id");
-                $.ajax({
-                    url: '/delete_transaction/' + transactionId,
-                    type: 'POST',
-                    success: function(response) {
-                        // Reload the current page after successful deletion
-                        window.location.reload(true);
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle error
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-    </script>
 </body>
-
 </html>
